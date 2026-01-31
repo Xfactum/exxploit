@@ -1,0 +1,70 @@
+# exxploit default configuration
+# Copy to ~/.exxploit/config.yaml to customize
+
+# --- C2 Server Settings ---
+c2:
+  host: "0.0.0.0"
+  port: 8080
+  auth_key: null  # Set to enable authentication (or use env EXXPLOIT_AUTH_KEY)
+  log_file: "c2_logs.json"
+  
+  # Rate Limiting (Production Hardening)
+  rate_limit:
+    enabled: true
+    default_limits: ["1000 per day", "100 per hour"]
+    strategy: "fixed-window"
+    storage_uri: "memory://"
+
+  # SSL/TLS (Recommended for production)
+  ssl:
+    enabled: false
+    cert: null
+    key: null
+
+# --- Stealth & Evasion ---
+stealth:
+  enabled: true
+  
+  # Human-like Behavior
+  mouse_jitter: true
+  typing_speed_range: [50, 150] # ms per keystroke
+  min_scroll_delay: 2000 # ms
+  
+  # CAPTCHA Solving
+  captcha:
+    enabled: false
+    provider: "2captcha" # 2captcha, anticaptcha, capsolver
+    api_key: null # Or set via env CAPTCHA_API_KEY
+    timeout: 60
+
+# --- Scanner Settings ---
+scanner:
+  timeout: 10
+  crawl_depth: 2
+  threads: 5
+  
+  # Browser Fingerprinting Defense
+  ua_randomize: true
+  ua_subset_size: 5
+  user_agents:
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    - "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
+    - "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.2; rv:121.0) Gecko/20100101 Firefox/121.0"
+
+# --- Payload Settings ---
+payloads:
+  default_obfuscation: "base64"
+  default_context: "html"
+  c2_base: "http://localhost:8080" # Default, overridden by active session
+  
+  # Polymorphism
+  use_polymorphism: true
+  entropy_level: "high"
+
+# --- Output Settings ---
+output:
+  verbose: false
+  colors: true
+  format: "table"  # table, json, csv
