@@ -88,7 +88,7 @@ ASCII_BANNER = """
  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚══════╝ ╚═════╝ ╚═╝   ╚═╝   
 [/bold red]
 [dim]          High-Evasion XSS Payload Toolkit v1.0.0[/dim]
-[dim cyan]       https://github.com/example/exxploit[/dim cyan]
+[dim cyan]       https://github.com/Xfactum/exxploit[/dim cyan]
 """
 
 

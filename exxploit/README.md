@@ -2,9 +2,9 @@
 
 > **Launch-Grade XSS Payload Toolkit & C2 Framework**
 
-[![CI](https://github.com/example/exxploit/workflows/CI/badge.svg)](https://github.com/example/exxploit/actions)
+[![CI](https://github.com/Xfactum/exxploit/workflows/CI/badge.svg)](https://github.com/Xfactum/exxploit/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/example/exxploit)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/Xfactum/exxploit)
 
 A professional red-teaming framework for XSS payload generation, automated exploitation, and session-based C2 management. Designed for authorized security auditing with advanced evasion capabilities.
 
@@ -25,7 +25,7 @@ A professional red-teaming framework for XSS payload generation, automated explo
 
 ### Linux / macOS
 ```bash
-git clone https://github.com/example/exxploit
+git clone https://github.com/Xfactum/exxploit
 cd exxploit
 pip install -r requirements.txt
 pip install -e .
@@ -34,7 +34,7 @@ playwright install chromium
 
 ### Windows
 ```powershell
-git clone https://github.com/example/exxploit
+git clone https://github.com/Xfactum/exxploit
 cd exxploit
 python -m pip install -r requirements.txt
 python -m pip install -e .
