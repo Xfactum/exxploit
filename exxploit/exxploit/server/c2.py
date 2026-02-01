@@ -27,7 +27,14 @@ def create_app(
     """
     app = Flask(__name__)
     
-    # Configuration
+    # Configuration - Priority: Arguments > Environment > Defaults
+    auth_key = auth_key or os.getenv('C2_AUTH_KEY')
+    
+    # Support Lab Mode or explicit log file via env
+    env_log_file = os.getenv('C2_LOG_FILE') or os.getenv('EXXPLOIT_SESSION_FILE')
+    if not log_file and env_log_file:
+        log_file = Path(env_log_file)
+        
     app.config['AUTH_KEY'] = auth_key
     app.config['LOG_FILE'] = log_file or Path('c2_logs.json')
     app.config['PAYLOAD_DIR'] = payload_dir or Path(__file__).parent.parent.parent
@@ -179,8 +186,11 @@ def create_app(
     return app
 
 
-def run_server(host: str = '0.0.0.0', port: int = 8080, **kwargs):
+def run_server(host: Optional[str] = None, port: Optional[int] = None, **kwargs):
     """Run the C2 server using Waitress."""
+    host = host or os.getenv('C2_HOST', '0.0.0.0')
+    port = port or int(os.getenv('C2_PORT', 8080))
+    
     app = create_app(**kwargs)
     print(f'[C2] Starting production server on {host}:{port}')
     serve(app, host=host, port=port, _quiet=True)

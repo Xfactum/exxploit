@@ -430,10 +430,10 @@ def lab():
     """
     try:
         # Import dynamically to keep startup fast
-        from tests import training
+        from exxploit.lab import training
         training.run_lab()
-    except ImportError:
-        console.print("[red]Error: Training module not found. Run from project root.[/red]")
+    except ImportError as e:
+        console.print(f"[red]Error: Training module not found ({e}). Ensure exxploit is correctly installed.[/red]")
     except Exception as e:
         console.print(f"[red]Error starting lab: {e}[/red]")
 
