@@ -75,6 +75,10 @@ exxploit --version
 | `command not found: exxploit` | Ensure `~/.local/bin` is in your PATH, or run `python -m exxploit` instead |
 | `pip: command not found` | Use `pip3` instead of `pip`, or `python3 -m pip` |
 | Permission errors | Add `--user` flag: `pip install --user -e .` |
+| `missing build_editable hook` | **Common on VPS:** Run `pip install --upgrade pip setuptools` before installing |
+
+> [!TIP]
+> **Production/VPS tip:** For production systems, you can skip the `-e` (editable) flag and install directly: `pip install .`
 
 ---
 
