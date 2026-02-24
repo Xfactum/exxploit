@@ -124,6 +124,16 @@ def load_config() -> dict:
     return default_config
 
 
+def save_config(config: dict) -> None:
+    """Save configuration to ~/.exxploit/config.yaml"""
+    ensure_config_dir()
+    if HAS_YAML:
+        try:
+            with open(CONFIG_FILE, 'w') as f:
+                yaml.safe_dump(config, f, default_flow_style=False)
+        except yaml.YAMLError as e:
+            logger.warning(f"Error saving config: {e}")
+
 
 def ensure_config_dir() -> None:
     """Create config directory if it doesn't exist."""
