@@ -106,7 +106,7 @@ Exploit the target application running at **http://{display_ip}:{LAB_TARGET_PORT
 ### Step 1: Scan for Vulnerabilities
 Open a NEW terminal and run:
 ```bash
-exxploit scan http://{display_ip}:{LAB_TARGET_PORT}
+exxploit scan "http://{display_ip}:{LAB_TARGET_PORT}/search?q=INJECT"
 ```
 
 ### Step 2: Launch Attack
