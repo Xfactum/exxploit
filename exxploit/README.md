@@ -28,6 +28,31 @@ A professional red-teaming framework for XSS payload generation, automated explo
 - **Python 3.9+** - [Download here](https://www.python.org/downloads/)
 - **Git** - [Download here](https://git-scm.com/downloads)
 
+#### 🐧 Ubuntu / VPS Users (Important)
+Modern versions of Ubuntu protect the system by stopping you from installing Python libraries globally. This prevents accidental damage to the operating system.
+
+To fix this, you must create a Virtual Environment (a "sandbox") for this project.
+
+Run these 4 commands in order. This creates a folder named `venv` inside your project and installs the libraries there safely:
+
+```bash
+# 1. Install the full Python toolkit (needed to create environments)
+sudo apt install -y python3-full
+
+# 2. Create the sandbox environment
+python3 -m venv venv
+
+# 3. Activate the sandbox (You must do this every time you log in to use this tool)
+source venv/bin/activate
+
+# 4. Now install the requirements safely
+pip install -r requirements.txt
+```
+
+**How to know it worked:**
+Your terminal prompt will change. You will see `(venv)` at the start of the line, like this:
+`(venv) ubuntu@your-server:~/exxploit$`
+
 ### Linux / macOS
 
 ```bash
